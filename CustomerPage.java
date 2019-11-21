@@ -29,6 +29,15 @@ public class CustomerPage extends JFrame implements ActionListener{
 		book_search = new JButton("Book Search");
 		addComp(mpp, book_search, 0, 2, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
+		account_info = new JButton("Account Info");
+		addComp(mpp, account_info, 6, 2, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		book_list = new JButton("Book List");
+		addComp(mpp, book_list, 0, 6, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		cart = new JButton("Cart");
+		addComp(mpp, cart, 6, 6, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
 		this.add(mpp);
 		this.setVisible(true);
 	}

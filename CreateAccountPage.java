@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 class CreateAccountPage extends JFrame implements ActionListener{
 	JPanel mpp;
-	JTextField username, password;
+	JTextField username, password, phone, email, address;
 	JButton submit;
 	
 	
@@ -35,24 +35,52 @@ class CreateAccountPage extends JFrame implements ActionListener{
 		JLabel username_label = new JLabel("Username");
 		addComp(mpp, username_label, 0,2,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
-		//add password label
-		JLabel password_label = new JLabel("Password");
-		addComp(mpp, password_label, 6,2,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
-		
 		//add username textbox
 		username = new JTextField();
 		username.setPreferredSize( new Dimension( 100, 24 ) );
 		addComp(mpp, username, 0,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
+		//add password label
+		JLabel password_label = new JLabel("Password");
+		addComp(mpp, password_label, 6,2,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+				
 		//add password textbox
 		password = new JTextField();
 		password.setPreferredSize(new Dimension(100,24));
 		addComp(mpp, password, 6,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
+		//add phone label
+		JLabel phone_label = new JLabel("Phone Number");
+		addComp(mpp, phone_label, 0,10,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		//add phone textbox
+		phone = new JTextField();
+		phone.setPreferredSize(new Dimension(100,24));
+		addComp(mpp, phone, 0,14,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		//add email label
+		JLabel email_label = new JLabel("Email Address");
+		addComp(mpp, email_label, 6,10,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		//add email textbox
+		email = new JTextField();
+		email.setPreferredSize(new Dimension(100,24));
+		addComp(mpp, email, 6,14,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		//add phone label
+		JLabel address_label = new JLabel("Home Address");
+		addComp(mpp, address_label, 3,18,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		//add phone textbox
+		address = new JTextField();
+		address.setPreferredSize(new Dimension(200,24));
+		addComp(mpp, address, 3,22,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
 		//add submit button
 		submit = new JButton("Submit");
 		submit.setPreferredSize( new Dimension( 200, 24 ) );
-		addComp(mpp, submit, 3,10,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		addComp(mpp, submit, 3,40,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		submit.addActionListener(this);
 		
 		this.add(mpp);
 		this.setVisible(true);
@@ -62,8 +90,9 @@ class CreateAccountPage extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==submit){ //on submit try to load customer page
-			//if login works
-			//load customer page
+			//create account ID
+			//push data to database
+			CustomerPage test = new CustomerPage();
 		}
 	}
 	

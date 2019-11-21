@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 class LoginPage extends JFrame implements ActionListener{ //login page
 	JPanel mpp;
-	JTextField username, password;
+	JTextField accountID, password;
 	JButton submit;
 	
 	
@@ -32,7 +32,7 @@ class LoginPage extends JFrame implements ActionListener{ //login page
 		mpp.setLayout(new GridBagLayout());
 		
 		//add username label
-		JLabel username_label = new JLabel("Username");
+		JLabel username_label = new JLabel("Account ID");
 		addComp(mpp, username_label, 0,2,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
 		//add password label
@@ -40,9 +40,9 @@ class LoginPage extends JFrame implements ActionListener{ //login page
 		addComp(mpp, password_label, 6,2,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
 		//add username textbox
-		username = new JTextField();
-		username.setPreferredSize( new Dimension( 100, 24 ) );
-		addComp(mpp, username, 0,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		accountID = new JTextField();
+		accountID.setPreferredSize( new Dimension( 100, 24 ) );
+		addComp(mpp, accountID, 0,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
 		//add password textbox
 		password = new JTextField();
@@ -53,6 +53,7 @@ class LoginPage extends JFrame implements ActionListener{ //login page
 		submit = new JButton("Submit");
 		submit.setPreferredSize( new Dimension( 200, 24 ) );
 		addComp(mpp, submit, 3,10,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		submit.addActionListener(this);
 		
 		this.add(mpp);
 		this.setVisible(true);
@@ -62,8 +63,9 @@ class LoginPage extends JFrame implements ActionListener{ //login page
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==submit){ //on submit try to load customer page
-			//if login works
-			//load customer page
+			//check data against database
+			//if correct 
+			CustomerPage test = new CustomerPage();
 		}
 	}
 	
