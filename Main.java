@@ -1,4 +1,5 @@
 package mypackage;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,10 +29,11 @@ public class Main extends JFrame implements ActionListener{
     static int rport;    
     JPanel mpp;
     JButton query1,query2,query3,query4,query5,query6;
+    JButton login, create_account;
     
     public Main(){
     	
-		this.setSize(800,900);
+		this.setSize(500,500);
 		this.setLocationRelativeTo(null);
 		this.setTitle("Group 21 DBMS GUI");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,30 +42,17 @@ public class Main extends JFrame implements ActionListener{
 		mpp = new JPanel();
 		mpp.setLayout(new GridBagLayout());
 		
-		query1 = new JButton("Query 1");
-//		query2 = new JButton("Query 2");
-//		query3 = new JButton("Query 3");
-//		query4 = new JButton("Query 4");
-//		query5 = new JButton("Query 5");
-//		query6 = new JButton("Query 6");
-		addComp(mpp, query1, 0,2,2,3, GridBagConstraints.WEST, GridBagConstraints.NONE);
-//		addComp(mpp, query2, 5,2,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
-//		addComp(mpp, query3, 10,2,2,3, GridBagConstraints.EAST, GridBagConstraints.NONE);
-//		addComp(mpp, query4, 0,6,2,3, GridBagConstraints.WEST, GridBagConstraints.NONE);
-//		addComp(mpp, query5, 5,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
-//		addComp(mpp, query6, 10,6,2,3, GridBagConstraints.EAST, GridBagConstraints.NONE);
+		login = new JButton("Login");
+		addComp(mpp, login, 0,2,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		create_account = new JButton("Create Account");
+		addComp(mpp, create_account, 6,2,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
-		if(query1.getModel().isPressed())
-			System.out.println("pressed");
-		query1.addActionListener(this);
-//		query2.addActionListener(myButtonListener);
-//		query3.addActionListener(myButtonListener);
-//		query4.addActionListener(myButtonListener);
-//		query5.addActionListener(myButtonListener);
-//		query6.addActionListener(myButtonListener);
+		query1 = new JButton("Query 1");
+		
+		login.addActionListener(this);
+		create_account.addActionListener(this);
 		
 		this.add(mpp);
-		this.pack();
 		this.setVisible(true);
 
     }
@@ -73,6 +62,12 @@ public class Main extends JFrame implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource()==query1){
 			execute("query1");
+		}
+		if(e.getSource()==login){
+			LoginPage test = new LoginPage();
+		}
+		if(e.getSource()==create_account){
+			CreateAccountPage test = new CreateAccountPage();
 		}
 		dispose();
 	}
@@ -156,9 +151,6 @@ public class Main extends JFrame implements ActionListener{
 
 
     }
-
-
-
-
 }
+
 
