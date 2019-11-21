@@ -1,0 +1,58 @@
+SCREENS (Each Black Bullet is a different Screen):
+•	Login
+  o	Register/Login
+•	User Main Page (Options)
+  o	Book List (Search)
+  o	Account Info
+  o	See All Books
+  o	Cart
+•	Book List (Search)
+  o	All 
+  o	Part Search
+•	Account and buttons to:
+  o	History
+  o	Account Information
+    	Change/View Information
+  o	Shopping Cart – Give Cart #
+    	Merge Carts
+    	Need Trigger on DB to Add Manager when > $1,000
+•	Employee Landing Page
+  o	See Books and Info of books
+  o	Cart Approval
+  o	Outstanding Orders
+    	Editing
+    	Updating
+  o	History
+  o	Add New Book/Remove Book
+  o	Analytics
+    	Look at queries below
+
+Things to accomplish from the above screens:
+
+Functions for customers:
+
+•	New user account registration
+•	User login
+•	User can update his address, password etc.
+•	Book search (by author name, title, category, year or combinations)
+•	Create one empty order or shopping cart
+•	Add/delete books from shopping cart
+•	Merge shopping carts
+•	Change shopping carts as orders (please note that once a shopping cart is changed to order, all of this shopping cart’s info should be removed from database).
+•	Place the order 
+•	Order trace 
+
+Functions for employees:
+
+•	List book information (e.g., title, author, price) and quantity-in-stock of some chosen books
+•	List information about those orders assigned to him/her
+•	Update order status
+•	Insert new books
+
+Functions for analysts
+
+•	What types of books are better sold in the second quarter than the first quarter?
+•	What kind of books/customers are most profitable?
+•	What is the average time between the order placed and shipped?
+•	Is there any significant difference between books published by different publishers in terms of profitability?
+
