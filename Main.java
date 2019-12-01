@@ -1,26 +1,14 @@
 package mypackage;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
-
-
-import com.jcraft.*;
-//https://stackoverflow.com/questions/1968293/connect-to-remote-mysql-database-through-ssh-using-java
 
 
 public class Main extends JFrame implements ActionListener{
@@ -60,9 +48,6 @@ public class Main extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource()==query1){
-			execute("query1");
-		}
 		if(e.getSource()==login){
 			LoginPage test = new LoginPage();
 		}
@@ -71,39 +56,7 @@ public class Main extends JFrame implements ActionListener{
 		}
 		dispose();
 	}
-    
-    public void execute(String s){
-        Connection con = null;
-        String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://" + rhost +":" + lport + "/";
-        String db = "zatheiss";
-        String dbUser = "zatheiss";
-	    String dbPasswd = "Tshodan01!";
-    	if(s.compareTo("query1")==0)
-    	    try{
-    	    	Class.forName(driver);
-    	        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
-    	        try{
-    	        	Statement st = con.createStatement();
-    	        	String sql = "select * from Book";
-    	        	ResultSet response = st.executeQuery(sql);
-    	        	while(response.next()){
-    	        		int ISBN = response.getInt("ISBN");
-    	        		String title = response.getString("Title");
-    	        		double price = response.getDouble("Price");
-    	        		int quantity = response.getInt("Quantity");
-    	        		System.out.println(ISBN + " " + title + " " + price + " " + quantity);
-    	        	}
-    	        	System.out.println("executed");
-    	        }
-    	        catch (SQLException x){
-    	        	System.out.println(x);
-    	      	}
-    	    }
-    	    catch (Exception e){
-    	    	e.printStackTrace();
-    	    }
-    }
+
 	private void addComp(JPanel thePanel, JComponent comp, int xP, int yP, int w, int h, int place, int stretch)
 	{
 		GridBagConstraints gridC = new GridBagConstraints();
@@ -117,38 +70,9 @@ public class Main extends JFrame implements ActionListener{
 		thePanel.add(comp, gridC);	
 	}
     
-    public static void go(){
-        String user = "zatheiss";
-        String password = "Grad2015!";
-        String host = "turing.csce.uark.edu";
-        int port=22;
-        try
-            {
-            JSch jsch = new JSch();
-            Session session = jsch.getSession(user, host, port);
-            lport = 4106;
-            rhost = "localhost";
-            rport = 3306;
-            session.setPassword(password);
-            session.setConfig("StrictHostKeyChecking", "no");
-            System.out.println("Establishing Connection...");
-	        session.connect();
-	        int assinged_port=session.setPortForwardingL(lport, rhost, rport);
-            System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
-            }
-        catch(Exception e){System.err.print(e);}
-    }
-	
-    
     public static void main(String[] args) {
-		      try{
-		      go();
-		  } catch(Exception ex){
-		      ex.printStackTrace();
-		  }
+
     	Main test = new Main();
-
-
 
     }
 }

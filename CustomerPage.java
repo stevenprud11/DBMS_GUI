@@ -1,5 +1,6 @@
 package mypackage;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,7 +14,9 @@ import javax.swing.JPanel;
 
 public class CustomerPage extends JFrame implements ActionListener{
 	JPanel mpp;
+	JButton logout;
 	JButton book_search, account_info, book_list, cart;
+	
 	
 	public CustomerPage(){
 		//set size of obj
@@ -38,8 +41,27 @@ public class CustomerPage extends JFrame implements ActionListener{
 		cart = new JButton("Cart");
 		addComp(mpp, cart, 6, 6, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
+		//add submit button
+		logout = new JButton("Logoff");
+		logout.setPreferredSize( new Dimension( 200, 24 ) );
+		addComp(mpp, logout, 3,40,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		logout.addActionListener(this);
+		
 		this.add(mpp);
 		this.setVisible(true);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==logout){
+			logoff();
+			this.setVisible(false);
+		}
+	}
+	
+	private void logoff() {
+		System.out.println("Made it here");
+		LoginPage login = new LoginPage();
 	}
 	
 	private void addComp(JPanel thePanel, JComponent comp, int xP, int yP, int w, int h, int place, int stretch)
@@ -55,14 +77,7 @@ public class CustomerPage extends JFrame implements ActionListener{
 		thePanel.add(comp, gridC);	
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource()==""){ //on submit try to load customer page
-			//if login works
-			//load customer page
-		}
-	}
+
 }
 
 
