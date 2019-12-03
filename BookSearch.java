@@ -48,6 +48,7 @@ public class BookSearch extends JFrame implements ActionListener{
 		mpp = new JPanel();
 		mpp.setLayout(new GridBagLayout());
 		
+		//adds labels to JPanel for data to be under
 		JLabel title_label = new JLabel("Title");
 		addComp(mpp, title_label, 0,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
@@ -69,6 +70,13 @@ public class BookSearch extends JFrame implements ActionListener{
 		
 	}
 	
+	/*
+	 * this function executes the book search query
+	 * it works by passing in the title of the book in the constructor
+	 * and searches the Book table for the book title
+	 * if no title is found nothing is printed
+	 * else, it puts the data for the book in the JPanel
+	 */
 	public void executeBookSearch(){
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
@@ -98,7 +106,7 @@ public class BookSearch extends JFrame implements ActionListener{
 	        		quantity = response.getInt("Quantity");
 	        		JLabel quantity_label = new JLabel(Integer.toString(quantity));
 	        		addComp(mpp, quantity_label, 12,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
-	        		
+	        		//add button to cart
 	        		button = new JButton("ADD");
 	        		addComp(mpp, button, 18, y, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	        		button.addActionListener(this);
@@ -115,7 +123,9 @@ public class BookSearch extends JFrame implements ActionListener{
 	    }
     	session.disconnect();
     }
-	
+	/*
+	 * ssh connection to database
+	 */
 	public static void sshConnection(){
         String user = "zatheiss";
         String password = "Grad2015!";
@@ -137,7 +147,9 @@ public class BookSearch extends JFrame implements ActionListener{
             }
         catch(Exception e){System.err.print(e);}
     }
-	
+	/*
+	 * add component to JPanel
+	 */
 	private static void addComp(JPanel thePanel, JComponent comp, int xP, int yP, int w, int h, int place, int stretch)
 	{
 		GridBagConstraints gridC = new GridBagConstraints();
@@ -150,7 +162,11 @@ public class BookSearch extends JFrame implements ActionListener{
 		gridC.fill = stretch;
 		thePanel.add(comp, gridC);	
 	}
-	
+	/*
+	 * Listens to see if button is pressed
+	 * if so then adds book to cart and decreases quantity 
+	 * of that book available in book table
+	 */
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==button){

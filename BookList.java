@@ -45,6 +45,7 @@ public class BookList extends JFrame implements ActionListener {
 		mpp = new JPanel();
 		mpp.setLayout(new GridBagLayout());
 	
+		//add labels for data to go under
 		JLabel title_label = new JLabel("Title");
 		addComp(mpp, title_label, 0,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		
@@ -66,6 +67,16 @@ public class BookList extends JFrame implements ActionListener {
 		
 	}
 	
+	/*
+	 * execute query to get all data from Book table
+	 * it loops through all the books, grabs all the data
+	 * and displays it row by row on the JPanel
+	 * 
+	 * it also adds the ISBN and Button to different arraylist
+	 * these correlate indexes to know which button corresponds
+	 * to which book, in the button listener
+	 * button[i] corresponds to ISBN_Location[i] (they are in arraylist)
+	 */
 	public void executeBookList(){
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
@@ -115,7 +126,9 @@ public class BookList extends JFrame implements ActionListener {
 	    }
     	session.disconnect();
     }
-	
+	/*
+	 * ssh connection to database
+	 */
 	public static void sshConnection(){
         String user = "zatheiss";
         String password = "Grad2015!";
@@ -152,6 +165,12 @@ public class BookList extends JFrame implements ActionListener {
 		thePanel.add(comp, gridC);	
 	}
 
+	/*
+	 * listen for button press loops through button arraylist
+	 * if button[i] is pressed, go to ISBN arraylist[i] and that book is chosen
+	 * decrease quantity and add book to cart
+	 * need more queries to update cart and update book quantity number
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

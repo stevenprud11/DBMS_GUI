@@ -37,6 +37,7 @@ public class AccountInfo extends JFrame {
 		mpp = new JPanel();
 		mpp.setLayout(new GridBagLayout());
 		
+		//Add labels to JPanel that the query response will go under
 		JLabel CName_Label = new JLabel("Name");
 		JLabel Email_Label = new JLabel("Email");
 		JLabel Password_Label = new JLabel("Password");
@@ -45,7 +46,6 @@ public class AccountInfo extends JFrame {
 		JLabel City_Label = new JLabel("City");
 		JLabel State_Label = new JLabel("State");
 		JLabel ZipCode_Label = new JLabel("ZipCode");
-		
 		addComp(mpp, CName_Label, 0,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		addComp(mpp, Email_Label, 4,0, 2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 		addComp(mpp, Password_Label, 8,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
@@ -63,7 +63,12 @@ public class AccountInfo extends JFrame {
 		
 		
 	}
-	
+	/*
+	 * This function executes the account info query
+	 * it will call the query, get the response back, orgainze it into variables
+	 * then it creates labels with the values back
+	 * and puts them on the JPanel
+	 */
 	public static void executeAccountInfo(){
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
@@ -121,7 +126,9 @@ public class AccountInfo extends JFrame {
     	session.disconnect();
     }
 	
-	
+	/*
+	 * creates ssh connection to turing database
+	 */
 	public static void sshConnection(){
         String user = "zatheiss";
         String password = "Grad2015!";
@@ -143,7 +150,9 @@ public class AccountInfo extends JFrame {
             }
         catch(Exception e){System.err.print(e);}
     }
-	
+	/*
+	 * add components to JPanel
+	 */
 	private static void addComp(JPanel thePanel, JComponent comp, int xP, int yP, int w, int h, int place, int stretch)
 	{
 		GridBagConstraints gridC = new GridBagConstraints();
