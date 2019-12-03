@@ -1,12 +1,16 @@
 package mypackage;
 
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.jcraft.jsch.JSch;
@@ -17,11 +21,14 @@ public class BookList extends JFrame {
     static String rhost;
     static int rport; 
 	static Session session;
-	JPanel mpp;
-	
+	static JPanel mpp;
+	static String title;
+	static int ISBN, quantity;
+	static double price;
 	
 	public BookList(){
 		sshConnection();
+		
 		
 		//set size of obj
 		this.setSize(500,500);
@@ -32,10 +39,12 @@ public class BookList extends JFrame {
 		mpp = new JPanel();
 		mpp.setLayout(new GridBagLayout());
 	
+		executeBookList();
+		
 		this.add(mpp);
 		this.setVisible(true);
 		
-		//executeBookList();
+		
 		
 	}
 	
@@ -52,19 +61,24 @@ public class BookList extends JFrame {
 	        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
 	        try{
 	        	Statement st = con.createStatement();
-	        	String sql = "";//change to "select * from book"
+	        	String sql = "select * from Book";
 	        	ResultSet response = st.executeQuery(sql);
+	        	int y = 0;
 	        	while(response.next()){
-	        		int CID = response.getInt("CID");
-	        		String CName = response.getString("CName");
-	        		String Email = response.getString("Email");
-	        		String userPassword = response.getString("userPassword");
-	        		String Phone = response.getString("Phone");
-	        		String Address = response.getString("Address");
-	        		String City = response.getString("City");
-	        		String State = response.getString("State");
-	        		String ZipCode = response.getString("ZipCode");
-	        		System.out.println(CID + " " + CName);
+	        		title = response.getString("Title");
+	        		JLabel title_label = new JLabel(title);
+	        		addComp(mpp, title_label, 0,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		ISBN = response.getInt("ISBN");
+	        		JLabel ISBN_label = new JLabel(Integer.toString(ISBN));
+	        		addComp(mpp, ISBN_label, 4,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		price = response.getDouble("Price");
+	        		JLabel price_label = new JLabel(Double.toString(price));
+	        		addComp(mpp, price_label, 8,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		quantity = response.getInt("Quantity");
+	        		JLabel quantity_label = new JLabel(Integer.toString(quantity));
+	        		addComp(mpp, quantity_label, 12,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		System.out.println(title + " " + ISBN + " " + price + " " + quantity);
+	        		y+=6;
 	        	}
 	        }
 	        	catch(Exception e){
@@ -98,4 +112,17 @@ public class BookList extends JFrame {
             }
         catch(Exception e){System.err.print(e);}
     }
+	
+	private static void addComp(JPanel thePanel, JComponent comp, int xP, int yP, int w, int h, int place, int stretch)
+	{
+		GridBagConstraints gridC = new GridBagConstraints();
+		gridC.gridx = xP;
+		gridC.gridy = yP;
+		gridC.gridwidth = w;
+		gridC.gridheight = h;
+		gridC.insets = new Insets(5,5,5,5);
+		gridC.anchor = place;
+		gridC.fill = stretch;
+		thePanel.add(comp, gridC);	
+	}
 }
