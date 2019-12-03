@@ -1,12 +1,16 @@
 package mypackage;
 
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.jcraft.jsch.JSch;
@@ -17,25 +21,46 @@ public class AccountInfo extends JFrame {
     static String rhost;
     static int rport; 
 	static Session session;
-	JPanel mpp;
+	static JPanel mpp;
+	static int CID;
 	
-	
-	public AccountInfo(){
+	public AccountInfo(int CID){
+		this.CID = CID;
 		sshConnection();
 		
 		//set size of obj
-		this.setSize(500,500);
+		this.setSize(800,500);
 		this.setLocationRelativeTo(null);
 		this.setTitle("Account Info");
 		
 		//set JPanel
 		mpp = new JPanel();
 		mpp.setLayout(new GridBagLayout());
-	
+		
+		JLabel CName_Label = new JLabel("Name");
+		JLabel Email_Label = new JLabel("Email");
+		JLabel Password_Label = new JLabel("Password");
+		JLabel Phone_Label = new JLabel("Phone");
+		JLabel Address_Label = new JLabel("Address");
+		JLabel City_Label = new JLabel("City");
+		JLabel State_Label = new JLabel("State");
+		JLabel ZipCode_Label = new JLabel("ZipCode");
+		
+		addComp(mpp, CName_Label, 0,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		addComp(mpp, Email_Label, 4,0, 2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		addComp(mpp, Password_Label, 8,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		addComp(mpp, Phone_Label, 12,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		addComp(mpp, Address_Label, 16,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		addComp(mpp, City_Label, 20,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		addComp(mpp, State_Label, 24,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		addComp(mpp, ZipCode_Label, 28,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);	
+		
+		executeAccountInfo();
+		
 		this.add(mpp);
 		this.setVisible(true);
 		
-		//executeCart();
+		
 		
 	}
 	
@@ -52,7 +77,7 @@ public class AccountInfo extends JFrame {
 	        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
 	        try{
 	        	Statement st = con.createStatement();
-	        	String sql = "";//"select * from Customer where CName = user name";
+	        	String sql = "select * from Customer where CID = '" + CID + "';";//"select * from Customer where CName = user name";
 	        	ResultSet response = st.executeQuery(sql);
 	        	while(response.next()){
 	        		int CID = response.getInt("CID");
@@ -64,6 +89,25 @@ public class AccountInfo extends JFrame {
 	        		String City = response.getString("City");
 	        		String State = response.getString("State");
 	        		String ZipCode = response.getString("ZipCode");
+	        		
+	        		JLabel CName_Label = new JLabel(CName);
+	        		JLabel Email_Label = new JLabel(Email);
+	        		JLabel Password_Label = new JLabel(userPassword);
+	        		JLabel Phone_Label = new JLabel(Phone);
+	        		JLabel Address_Label = new JLabel(Address);
+	        		JLabel City_Label = new JLabel(City);
+	        		JLabel State_Label = new JLabel(State);
+	        		JLabel ZipCode_Label = new JLabel(ZipCode);
+	        		
+	        		addComp(mpp, CName_Label, 0,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		addComp(mpp, Email_Label, 4,6, 2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		addComp(mpp, Password_Label, 8,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		addComp(mpp, Phone_Label, 12,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		addComp(mpp, Address_Label, 16,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		addComp(mpp, City_Label, 20,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		addComp(mpp, State_Label, 24,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		addComp(mpp, ZipCode_Label, 28,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		
 	        		System.out.println(CID + " " + CName);
 	        	}
 	        }
@@ -99,4 +143,17 @@ public class AccountInfo extends JFrame {
             }
         catch(Exception e){System.err.print(e);}
     }
+	
+	private static void addComp(JPanel thePanel, JComponent comp, int xP, int yP, int w, int h, int place, int stretch)
+	{
+		GridBagConstraints gridC = new GridBagConstraints();
+		gridC.gridx = xP;
+		gridC.gridy = yP;
+		gridC.gridwidth = w;
+		gridC.gridheight = h;
+		gridC.insets = new Insets(5,5,5,5);
+		gridC.anchor = place;
+		gridC.fill = stretch;
+		thePanel.add(comp, gridC);	
+	}
 }

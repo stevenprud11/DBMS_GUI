@@ -90,7 +90,8 @@ class LoginPage extends JFrame implements ActionListener{ //login page
 			sshConnection();
 			databaseLogin();
 			if (found == true) {
-				CustomerPage test = new CustomerPage();
+				session.disconnect();
+				CustomerPage test = new CustomerPage(Integer.parseInt(accountID.getText()));
 			}
 		} catch (Exception e) {
 			failedAction("login");

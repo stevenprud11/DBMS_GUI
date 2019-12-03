@@ -1,26 +1,42 @@
 package mypackage;
 
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-public class BookSearch extends JFrame {
+public class BookSearch extends JFrame implements ActionListener{
 	static int lport;
     static String rhost;
     static int rport; 
 	static Session session;
 	JPanel mpp;
-	String title;
+	static String title_value;
+	static String title;
+	static int ISBN, quantity;
+	static double price;
+	static JButton button;
+	
 	public BookSearch(String title){
-		this.title = title;
+		if(title.compareTo("")!=0)
+			this.title_value = title;
+		else
+			this.title_value="*";
+		
 		sshConnection();
 		
 		//set size of obj
@@ -31,15 +47,29 @@ public class BookSearch extends JFrame {
 		//set JPanel
 		mpp = new JPanel();
 		mpp.setLayout(new GridBagLayout());
+		
+		JLabel title_label = new JLabel("Title");
+		addComp(mpp, title_label, 0,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		JLabel ISBN_label = new JLabel("ISBN");
+		addComp(mpp, ISBN_label, 4,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	
+		JLabel price_label = new JLabel("Price");
+		addComp(mpp, price_label, 8,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		JLabel quantity_label = new JLabel("Quantity");
+		addComp(mpp, quantity_label, 12,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		
+		executeBookSearch();
+		
 		this.add(mpp);
 		this.setVisible(true);
 		
-		//executeBookSearch();
+		
 		
 	}
 	
-	public static void executeBookSearch(){
+	public void executeBookSearch(){
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://" + rhost +":" + lport + "/";
@@ -52,19 +82,28 @@ public class BookSearch extends JFrame {
 	        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
 	        try{
 	        	Statement st = con.createStatement();
-	        	String sql = "";//select * from book where book_name = book_title;
+	        	String sql = "select * from Book where Title = '" + title_value + "';";
 	        	ResultSet response = st.executeQuery(sql);
+	        	int y = 6;
 	        	while(response.next()){
-	        		int CID = response.getInt("CID");
-	        		String CName = response.getString("CName");
-	        		String Email = response.getString("Email");
-	        		String userPassword = response.getString("userPassword");
-	        		String Phone = response.getString("Phone");
-	        		String Address = response.getString("Address");
-	        		String City = response.getString("City");
-	        		String State = response.getString("State");
-	        		String ZipCode = response.getString("ZipCode");
-	        		System.out.println(CID + " " + CName);
+	        		title = response.getString("Title");
+	        		JLabel title_label = new JLabel(title);
+	        		addComp(mpp, title_label, 0,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		ISBN = response.getInt("ISBN");
+	        		JLabel ISBN_label = new JLabel(Integer.toString(ISBN));
+	        		addComp(mpp, ISBN_label, 4,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		price = response.getDouble("Price");
+	        		JLabel price_label = new JLabel(Double.toString(price));
+	        		addComp(mpp, price_label, 8,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		quantity = response.getInt("Quantity");
+	        		JLabel quantity_label = new JLabel(Integer.toString(quantity));
+	        		addComp(mpp, quantity_label, 12,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		
+	        		button = new JButton("ADD");
+	        		addComp(mpp, button, 18, y, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+	        		button.addActionListener(this);
+
+	        		y+=6;
 	        	}
 	        }
 	        	catch(Exception e){
@@ -98,4 +137,28 @@ public class BookSearch extends JFrame {
             }
         catch(Exception e){System.err.print(e);}
     }
+	
+	private static void addComp(JPanel thePanel, JComponent comp, int xP, int yP, int w, int h, int place, int stretch)
+	{
+		GridBagConstraints gridC = new GridBagConstraints();
+		gridC.gridx = xP;
+		gridC.gridy = yP;
+		gridC.gridwidth = w;
+		gridC.gridheight = h;
+		gridC.insets = new Insets(5,5,5,5);
+		gridC.anchor = place;
+		gridC.fill = stretch;
+		thePanel.add(comp, gridC);	
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==button){
+			System.out.println("Button Pressed... Adding book to cart");
+			//add item to cart where ISBN = ISBN_Location.get(i);
+			//update table to decrease quantity where ISBN = ISBN_Location.get(i);
+		}
+			
+	}
+	
 }

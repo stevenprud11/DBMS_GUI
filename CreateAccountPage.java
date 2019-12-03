@@ -163,7 +163,7 @@ class CreateAccountPage extends JFrame implements ActionListener{
 			sshConnection();
 			databaseLogin();
 			if (foundRecord == false) {
-				CustomerPage test = new CustomerPage();
+				CustomerPage test = new CustomerPage(newID);
 			}
 		} catch (Exception e) {
 			failedAction("login");

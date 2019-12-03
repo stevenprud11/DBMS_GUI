@@ -1,5 +1,6 @@
-SCREENS (Each Black Bullet is a different Screen that must be done):
-
+SCREENS (Each Black Bullet is a different Screen):
+•	Login
+  o	Register/Login
 •	User Main Page (Options)
   o	Book List (Search)
   o	Account Info
@@ -25,10 +26,6 @@ SCREENS (Each Black Bullet is a different Screen that must be done):
   o	Add New Book/Remove Book
   o	Analytics
     	Look at queries below
-
-Finished Screens:
-•	Login
-  o	Register/Login
 
 Things to accomplish from the above screens:
 

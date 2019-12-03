@@ -30,8 +30,10 @@ public class CustomerPage extends JFrame implements ActionListener{
     static String rhost;
     static int rport; 
 	static Session session;
+	int CID;
 	
-	public CustomerPage(){
+	public CustomerPage(int CID){
+		this.CID = CID;
 		//set size of obj
 		this.setSize(500,500);
 		this.setLocationRelativeTo(null);
@@ -91,7 +93,7 @@ public class CustomerPage extends JFrame implements ActionListener{
 			}
 			else if(e.getSource()==account_info){
 				System.out.println("Executing account info");
-				AccountInfo accountinfo = new AccountInfo();
+				AccountInfo accountinfo = new AccountInfo(CID);
 			}
 			else if(e.getSource()==cart){
 				System.out.println("Executing cart");
