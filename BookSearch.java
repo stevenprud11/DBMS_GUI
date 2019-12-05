@@ -8,8 +8,11 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -31,10 +34,12 @@ public class BookSearch extends JFrame implements ActionListener{
 	static int ISBN, quantity;
 	static double price;
 	static JButton button;
-	//static BookList BL = new BookList(CID);
-	//static ArrayList<Integer> ISBNList = BL.getISBN();
+	static ArrayList<JButton> add_button = new ArrayList<>();
+	public static ArrayList<Integer> ISBN_Location = new ArrayList<Integer>();
+	int CID;
 	
 	public BookSearch(String title, int CID){
+		this.CID = CID;
 		if(title.compareTo("")!=0)
 			this.title_value = title;
 		else
@@ -110,9 +115,15 @@ public class BookSearch extends JFrame implements ActionListener{
 	        		JLabel quantity_label = new JLabel(Integer.toString(quantity));
 	        		addComp(mpp, quantity_label, 12,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	        		//add button to cart
-	        		button = new JButton("ADD");
-	        		addComp(mpp, button, 18, y, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
-	        		button.addActionListener(this);
+	        		
+	        		if(quantity > 0) {
+		        		JButton button = new JButton("ADD");
+		        		addComp(mpp, button, 18, y, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		        		button.addActionListener(this);
+		        		add_button.add(button);
+		        		ISBN_Location.add(ISBN);
+	        		}
+	        		
 
 	        		y+=6;
 	        	}
@@ -171,13 +182,58 @@ public class BookSearch extends JFrame implements ActionListener{
 	 * of that book available in book table
 	 */
 	public void actionPerformed(ActionEvent e) {
+		String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://" + rhost +":" + lport + "/";
+        String db = "zatheiss";
+        String dbUser = "zatheiss";
+	    String dbPasswd = "password";
 		// TODO Auto-generated method stub
-		if(e.getSource()==button){
-			System.out.println("Button Pressed... Adding book to cart");
-			//add item to cart where ISBN = ISBN_Location.get(i);
-			//update table to decrease quantity where ISBN = ISBN_Location.get(i);
-		}
-			
+		for(int i = 0; i < add_button.size(); i++){
+			if(e.getSource()==add_button.get(i)){
+				System.out.println("correlates to " + ISBN_Location.get(i));
+				sshConnection();
+	    	    try{
+	    	    	Class.forName(driver);
+	    	    	String reasonForFail = "";
+	    	        Connection con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
+	    	        try{
+	    	        	Statement st = con.createStatement();
+	    	        	Date date = new Date();
+	    	        	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+	    	        	System.out.println(formatter.format(date));
+	    	        	String sql = "INSERT INTO Cart_Detail (Cart_ID, ISBN, Quantity, Date_Created)"
+	    	        			+ "VALUES (( SELECT Cart_ID FROM Shopping_Cart WHERE CID ='"+CID+"'), '"+ISBN_Location.get(i)+"', '"+1+"', '"+formatter.format(date)+"')";
+	    	        	int response = st.executeUpdate(sql);
+	    	        	sql = "SELECT Quantity FROM Book WHERE ISBN='"+ISBN_Location.get(i)+"'";
+	    	        	ResultSet queryResult = st.executeQuery(sql);
+	    	        	queryResult.next();
+	    	        	int currentQuantity = queryResult.getInt("Quantity") - 1;
+	    	        	sql = "UPDATE Book SET Quantity = '"+currentQuantity+"' WHERE ISBN='"+ISBN_Location.get(i)+"'";
+	    	        	int updateResponse = st.executeUpdate(sql);
+	    	        	if (response == 1) {
+	    	        		session.disconnect();
+	    	        	}
+	    	        	else {
+	    	        		session.disconnect();
+	    	        	}
+	    	        	
+	    	        }
+	    	        catch (SQLException x){
+	    	        	System.out.println(x);
+	    	      	}
+	    	    }
+	    	    catch (Exception e1){
+	    	    	e1.printStackTrace();
+	    	    }
+	    	 
+	    	    session.disconnect();
+	    	    this.dispose();
+	    	    BookSearch booksearch = new BookSearch(title_value, CID);
+	    	    sshConnection();
+	    	    executeBookSearch();
+	    	    mpp.validate();
+	    	    mpp.repaint();
+			}
+		}	
 	}
-	
 }

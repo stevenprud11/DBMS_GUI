@@ -33,7 +33,7 @@ public class BookList extends JFrame implements ActionListener {
 	static int ISBN, quantity;
 	static double price;
 	static ArrayList<JButton> add_button = new ArrayList<>();
-	public static ArrayList<Integer> ISBN_Location = new ArrayList<Integer>();
+	static ArrayList<Integer> ISBN_Location = new ArrayList<Integer>();
 	int CID;
 	
 	public BookList(int CID){
@@ -112,12 +112,14 @@ public class BookList extends JFrame implements ActionListener {
 	        		JLabel quantity_label = new JLabel(Integer.toString(quantity));
 	        		addComp(mpp, quantity_label, 12,y,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	        		
-	        		JButton button = new JButton("ADD");
-	        		addComp(mpp, button, 18, y, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
-	        		button.addActionListener(this);
-	        		
-	        		add_button.add(button);
-	        		ISBN_Location.add(ISBN);
+	        		if(quantity > 0) {
+		        		JButton button = new JButton("ADD");
+		        		addComp(mpp, button, 18, y, 2, 3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		        		button.addActionListener(this);
+		        		add_button.add(button);
+		        		ISBN_Location.add(ISBN);
+	        		}
+
 
 	        		y+=6;
 	        	}
@@ -169,11 +171,6 @@ public class BookList extends JFrame implements ActionListener {
 		gridC.fill = stretch;
 		thePanel.add(comp, gridC);	
 	}
-	
-	public ArrayList<Integer> getISBN() {
-		return ISBN_Location;
-	}
-
 	/*
 	 * listen for button press loops through button arraylist
 	 * if button[i] is pressed, go to ISBN arraylist[i] and that book is chosen
@@ -204,6 +201,12 @@ public class BookList extends JFrame implements ActionListener {
 	    	        	String sql = "INSERT INTO Cart_Detail (Cart_ID, ISBN, Quantity, Date_Created)"
 	    	        			+ "VALUES (( SELECT Cart_ID FROM Shopping_Cart WHERE CID ='"+CID+"'), '"+ISBN_Location.get(i)+"', '"+1+"', '"+formatter.format(date)+"')";
 	    	        	int response = st.executeUpdate(sql);
+	    	        	sql = "SELECT Quantity FROM Book WHERE ISBN='"+ISBN_Location.get(i)+"'";
+	    	        	ResultSet queryResult = st.executeQuery(sql);
+	    	        	queryResult.next();
+	    	        	int currentQuantity = queryResult.getInt("Quantity") - 1;
+	    	        	sql = "UPDATE Book SET Quantity = '"+currentQuantity+"' WHERE ISBN='"+ISBN_Location.get(i)+"'";
+	    	        	int updateResponse = st.executeUpdate(sql);
 	    	        	if (response == 1) {
 	    	        		session.disconnect();
 	    	        	}
@@ -221,8 +224,12 @@ public class BookList extends JFrame implements ActionListener {
 	    	    }
 	    	 
 	    	    session.disconnect();
-				//add item to cart where ISBN = ISBN_Location.get(i);
-				//update table to decrease quantity where ISBN = ISBN_Location.get(i);
+	    	    this.dispose();
+	    	    BookList booklist = new BookList(CID);
+	    	    sshConnection();
+	    	    executeBookList();
+	    	    mpp.validate();
+	    	    mpp.repaint();
 			}
 		}	
 	}
