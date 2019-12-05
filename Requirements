@@ -1,3 +1,14 @@
+Need to do:
+  Cart Window (Remove from cart, Merge Cart)
+    Pick Cart to Open (If more than 1)
+  Account Window (Edit Information?)
+  Checkout Button (Marks cart as checked out (Cart Table))
+    Has a window for checkout (Billing and Shipping Address (Don't need to save))
+
+
+
+
+
 SCREENS (Each Black Bullet is a different Screen):
 •	Login
   o	Register/Login
@@ -27,7 +38,6 @@ SCREENS (Each Black Bullet is a different Screen):
   o	Analytics
     	Look at queries below
 
-Things to accomplish from the above screens:
 
 Functions for customers:
 
