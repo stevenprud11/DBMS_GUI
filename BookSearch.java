@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -30,8 +31,10 @@ public class BookSearch extends JFrame implements ActionListener{
 	static int ISBN, quantity;
 	static double price;
 	static JButton button;
+	//static BookList BL = new BookList(CID);
+	//static ArrayList<Integer> ISBNList = BL.getISBN();
 	
-	public BookSearch(String title){
+	public BookSearch(String title, int CID){
 		if(title.compareTo("")!=0)
 			this.title_value = title;
 		else

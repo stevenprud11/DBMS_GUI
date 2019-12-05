@@ -20,7 +20,7 @@ public class Cart extends JFrame {
 	JPanel mpp;
 	
 	
-	public Cart(){
+	public Cart(int CID){
 		sshConnection();
 		
 		//set size of obj

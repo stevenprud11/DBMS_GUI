@@ -8,8 +8,11 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -30,10 +33,12 @@ public class BookList extends JFrame implements ActionListener {
 	static int ISBN, quantity;
 	static double price;
 	static ArrayList<JButton> add_button = new ArrayList<>();
-	static ArrayList<Integer> ISBN_Location = new ArrayList<Integer>();
+	public static ArrayList<Integer> ISBN_Location = new ArrayList<Integer>();
+	int CID;
 	
-	public BookList(){
+	public BookList(int CID){
 		sshConnection();
+		this.CID = CID;
 		
 		
 		//set size of obj
@@ -164,6 +169,10 @@ public class BookList extends JFrame implements ActionListener {
 		gridC.fill = stretch;
 		thePanel.add(comp, gridC);	
 	}
+	
+	public ArrayList<Integer> getISBN() {
+		return ISBN_Location;
+	}
 
 	/*
 	 * listen for button press loops through button arraylist
@@ -173,10 +182,45 @@ public class BookList extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://" + rhost +":" + lport + "/";
+        String db = "zatheiss";
+        String dbUser = "zatheiss";
+	    String dbPasswd = "password";
 		// TODO Auto-generated method stub
 		for(int i = 0; i < add_button.size(); i++){
 			if(e.getSource()==add_button.get(i)){
 				System.out.println("correlates to " + ISBN_Location.get(i));
+				sshConnection();
+	    	    try{
+	    	    	Class.forName(driver);
+	    	    	String reasonForFail = "";
+	    	        Connection con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
+	    	        try{
+	    	        	Statement st = con.createStatement();
+	    	        	Date date = new Date();
+	    	        	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+	    	        	System.out.println(formatter.format(date));
+	    	        	String sql = "INSERT INTO Cart_Detail (Cart_ID, ISBN, Quantity, Date_Created)"
+	    	        			+ "VALUES (( SELECT Cart_ID FROM Shopping_Cart WHERE CID ='"+CID+"'), '"+ISBN_Location.get(i)+"', '"+1+"', '"+formatter.format(date)+"')";
+	    	        	int response = st.executeUpdate(sql);
+	    	        	if (response == 1) {
+	    	        		session.disconnect();
+	    	        	}
+	    	        	else {
+	    	        		session.disconnect();
+	    	        	}
+	    	        	
+	    	        }
+	    	        catch (SQLException x){
+	    	        	System.out.println(x);
+	    	      	}
+	    	    }
+	    	    catch (Exception e1){
+	    	    	e1.printStackTrace();
+	    	    }
+	    	 
+	    	    session.disconnect();
 				//add item to cart where ISBN = ISBN_Location.get(i);
 				//update table to decrease quantity where ISBN = ISBN_Location.get(i);
 			}

@@ -83,13 +83,13 @@ public class CustomerPage extends JFrame implements ActionListener{
 		else {
 			if(e.getSource()==book_list){
 				System.out.println("Executing book list");
-				BookList booklist = new BookList();
+				BookList booklist = new BookList(CID);
 			}
 			else if(e.getSource()==book_search){
 				System.out.println("Executing book search");
 				if(book_title.getText().compareTo("")==0)
 					book_title.setText("*");
-				BookSearch booksearch = new BookSearch(book_title.getText());
+				BookSearch booksearch = new BookSearch(book_title.getText(), CID);
 			}
 			else if(e.getSource()==account_info){
 				System.out.println("Executing account info");
@@ -97,7 +97,7 @@ public class CustomerPage extends JFrame implements ActionListener{
 			}
 			else if(e.getSource()==cart){
 				System.out.println("Executing cart");
-				Cart cart = new Cart();
+				Cart cart = new Cart(CID);
 			}
 		}
 	}
