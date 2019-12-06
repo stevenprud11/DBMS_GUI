@@ -199,7 +199,7 @@ public class BookList extends JFrame implements ActionListener {
 	    	        	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
 	    	        	System.out.println(formatter.format(date));
 	    	        	String sql = "INSERT INTO Cart_Detail (Cart_ID, ISBN, Quantity, Date_Created)"
-	    	        			+ "VALUES (( SELECT Cart_ID FROM Shopping_Cart WHERE CID ='"+CID+"'), '"+ISBN_Location.get(i)+"', '"+1+"', '"+formatter.format(date)+"')";
+	    	        			+ "VALUES (( SELECT Cart_ID FROM Shopping_Cart WHERE CID ='"+CID+"'), '"+ISBN_Location.get(i)+"', '"+1+"', '"+formatter.format(date)+"', '"+formatter.format(date)+"')";
 	    	        	int response = st.executeUpdate(sql);
 	    	        	sql = "SELECT Quantity FROM Book WHERE ISBN='"+ISBN_Location.get(i)+"'";
 	    	        	ResultSet queryResult = st.executeQuery(sql);
