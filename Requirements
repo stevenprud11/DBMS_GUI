@@ -9,9 +9,8 @@ Need to do:
     Has a window for checkout (Billing and Shipping Address (Don't need to save))
     Merging carts will be by allowing users to pick the books they wish to Checkout (Similar to BookSearch, but add to checkout)
     
-Note there is only one shipping address and one billing address for each order though the shipping address may 
-  not be the same as the billing address. Currently for payment method, it only accepts credit card,
-  hence the bookstore needs to record credit card information.
+ASSUMPTION:
+Each Book is it's own cart, the merge occurs during checkout when you select the books to purchase.
 
 
 
