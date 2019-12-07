@@ -36,7 +36,10 @@ public class BookSearch extends JFrame implements ActionListener{
 	static JButton button;
 	static ArrayList<JButton> add_button = new ArrayList<>();
 	public static ArrayList<Integer> ISBN_Location = new ArrayList<Integer>();
+	static ArrayList<Integer> Cart_List = new ArrayList<Integer>();
 	int CID;
+	static int cart_ID = 0, newCart;
+	static boolean notfound = false;
 	
 	public BookSearch(String title, int CID){
 		this.CID = CID;
@@ -181,6 +184,9 @@ public class BookSearch extends JFrame implements ActionListener{
 	 * if so then adds book to cart and decreases quantity 
 	 * of that book available in book table
 	 */
+	
+	
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://" + rhost +":" + lport + "/";
@@ -194,28 +200,55 @@ public class BookSearch extends JFrame implements ActionListener{
 				sshConnection();
 	    	    try{
 	    	    	Class.forName(driver);
-	    	    	String reasonForFail = "";
 	    	        Connection con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
 	    	        try{
 	    	        	Statement st = con.createStatement();
 	    	        	Date date = new Date();
 	    	        	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
-	    	        	System.out.println(formatter.format(date));
-	    	        	String sql = "INSERT INTO Cart_Detail (Cart_ID, ISBN, Quantity, Date_Created, Date_Updated)"
-	    	        			+ "VALUES (( SELECT Cart_ID FROM Shopping_Cart WHERE CID ='"+CID+"'), '"+ISBN_Location.get(i)+"', '"+1+"', '"+formatter.format(date)+"', '"+formatter.format(date)+"')";
-	    	        	int response = st.executeUpdate(sql);
+	    	        	String sql = "SELECT * FROM Shopping_Cart WHERE CID='"+CID+"';";
+	    	        	ResultSet carts = st.executeQuery(sql);
+	    	        	System.out.println(newCart);
+	    	        	
+	    	        	while (carts.next()) {
+	    	        		Cart_List.add(carts.getInt("Cart_ID"));
+	    	        	}
+	    	        	for(int x = 0; x < Cart_List.size(); x++){
+	    	        		if (Cart_List.get(x) != null) {
+	    	        			sql = "SELECT Cart_ID FROM Shopping_Cart";
+		    	        		ResultSet ids = st.executeQuery(sql);
+		    	        		while (ids.next()) {
+		    	        			if (ids.getInt("Cart_ID") > cart_ID)
+		    	        				cart_ID = ids.getInt("Cart_ID");
+		    	        		}
+		    	        		notfound = true;
+	    	        		}
+	    	        	}
+	    	        	if (notfound == true) {
+		    	        	newCart = cart_ID + 1;
+	    	        		sql = "INSERT INTO Shopping_Cart (Cart_ID, CID) VALUES ('"+newCart+"', '"+CID+"');";
+	    	        		st.executeUpdate(sql);
+	    	        	}
+	    	        	
+	    	        	if (newCart == 0) {
+		    	        	sql = "INSERT INTO Cart_Detail (Cart_ID, ISBN, Quantity, Date_Created, Date_Updated)"
+		    	        			+ "VALUES ((SELECT Cart_ID FROM Shopping_Cart WHERE CID ='"+CID+"'), '"+ISBN_Location.get(i)+"', '"+1+"', '"+formatter.format(date)+"', '"+formatter.format(date)+"')";
+		    	        	st.executeUpdate(sql);
+	    	        	}
+	    	        	
+	    	        	else if (newCart > 0) {
+	    	        		sql = "INSERT INTO Cart_Detail (Cart_ID, ISBN, Quantity, Date_Created, Date_Updated)"
+		    	        			+ "VALUES ('"+newCart+"', '"+ISBN_Location.get(i)+"', '"+1+"', '"+formatter.format(date)+"', '"+formatter.format(date)+"')";
+		    	        	st.executeUpdate(sql);
+	    	        		
+	    	        	}
 	    	        	sql = "SELECT Quantity FROM Book WHERE ISBN='"+ISBN_Location.get(i)+"'";
 	    	        	ResultSet queryResult = st.executeQuery(sql);
 	    	        	queryResult.next();
 	    	        	int currentQuantity = queryResult.getInt("Quantity") - 1;
+	    	        	System.out.println("Quantity"+currentQuantity);
 	    	        	sql = "UPDATE Book SET Quantity = '"+currentQuantity+"' WHERE ISBN='"+ISBN_Location.get(i)+"'";
-	    	        	int updateResponse = st.executeUpdate(sql);
-	    	        	if (response == 1) {
-	    	        		session.disconnect();
-	    	        	}
-	    	        	else {
-	    	        		session.disconnect();
-	    	        	}
+	    	        	st.executeUpdate(sql);
+	    	        	session.disconnect();
 	    	        	
 	    	        }
 	    	        catch (SQLException x){

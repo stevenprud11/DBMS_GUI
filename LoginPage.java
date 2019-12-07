@@ -133,10 +133,8 @@ class LoginPage extends JFrame implements ActionListener{ //login page
             rport = 3306;
             session.setPassword(password);
             session.setConfig("StrictHostKeyChecking", "no");
-            System.out.println("Establishing Connection...");
 	        session.connect();
-	        int assinged_port=session.setPortForwardingL(lport, rhost, rport);
-            System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
+	        session.setPortForwardingL(lport, rhost, rport);
             }
         catch(Exception e){System.err.print(e);}
     }
@@ -169,7 +167,6 @@ class LoginPage extends JFrame implements ActionListener{ //login page
     	        	if (accountID.getText().contentEquals(Integer.toString(CID))) {
     	        		if (password.getText().contentEquals(userPassword)) {
         	        		found = true;
-        	        		System.out.println(CID+" "+Email+" "+userPassword+" "+Phone+" "+Address+" "+City+" "+State+" "+ZipCode);
         	        		break;
     	        		}
     	        		reasonForFail = "password";
