@@ -1,7 +1,6 @@
 Need to do:
-  Cart Window (Remove from cart, Merge Cart)
-    Remove from Cart, All books selected will get the Cart_ID changed to the Highest number.
-    
+  Cart Window
+    Close Cart window when Checkout Closes.
   Account Window 
     Be able to Edit Information then save to DB.
     Use the create user and then if empty skip
