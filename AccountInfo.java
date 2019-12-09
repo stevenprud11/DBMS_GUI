@@ -1,5 +1,28 @@
 package mypackage;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.FlowLayout;  
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Driver;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,19 +35,30 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-public class AccountInfo extends JFrame {
+public class AccountInfo extends JFrame implements ActionListener {
 	static int lport;
     static String rhost;
     static int rport; 
 	static Session session;
 	static JPanel mpp;
 	static int CID;
+	static JButton submit;
+	static JTextField CName_Label;
+	static JTextField Email_Label;
+	static JTextField Password_Label;
+	static JTextField Phone_Label;
+	static JTextField Address_Label;
+	static JTextField City_Label;
+	static JTextField State_Label;
+	static JTextField ZipCode_Label;
 	
-	public AccountInfo(int CID){
+	
+	public AccountInfo(int CID) {
 		this.CID = CID;
 		sshConnection();
 		
@@ -56,6 +90,10 @@ public class AccountInfo extends JFrame {
 		addComp(mpp, ZipCode_Label, 28,0,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);	
 		
 		executeAccountInfo();
+		
+		submit = new JButton("Submit");
+		addComp(mpp, submit, 12,12,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+		submit.addActionListener(this);
 		
 		this.add(mpp);
 		this.setVisible(true);
@@ -90,14 +128,23 @@ public class AccountInfo extends JFrame {
 	        		String State = response.getString("State");
 	        		String ZipCode = response.getString("ZipCode");
 	        		
-	        		JLabel CName_Label = new JLabel(CName);
-	        		JLabel Email_Label = new JLabel(Email);
-	        		JLabel Password_Label = new JLabel(userPassword);
-	        		JLabel Phone_Label = new JLabel(Phone);
-	        		JLabel Address_Label = new JLabel(Address);
-	        		JLabel City_Label = new JLabel(City);
-	        		JLabel State_Label = new JLabel(State);
-	        		JLabel ZipCode_Label = new JLabel(ZipCode);
+	        		CName_Label = new JTextField(CName);
+	        		Email_Label = new JTextField(Email);
+	        		Password_Label = new JTextField(userPassword);
+	        		Phone_Label = new JTextField(Phone);
+	        		Address_Label = new JTextField(Address);
+	        		City_Label = new JTextField(City);
+	        		State_Label = new JTextField(State);
+	        		ZipCode_Label = new JTextField(ZipCode);
+	        		
+	        		CName_Label.setPreferredSize( new Dimension( 100, 24 ) );
+//	        		Email_Label.setPreferredSize( new Dimension( 100, 24 ) );
+//	        		Password_Label.setPreferredSize( new Dimension( 100, 24 ) );
+//	        		Phone_Label.setPreferredSize( new Dimension( 100, 24 ) );
+//	        		Address_Label.setPreferredSize( new Dimension( 100, 24 ) );
+//	        		City_Label.setPreferredSize( new Dimension( 100, 24 ) );
+//	        		State_Label.setPreferredSize( new Dimension( 100, 24 ) );
+//	        		ZipCode_Label.setPreferredSize( new Dimension( 100, 24 ) );
 	        		
 	        		addComp(mpp, CName_Label, 0,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	        		addComp(mpp, Email_Label, 4,6, 2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
@@ -154,5 +201,15 @@ public class AccountInfo extends JFrame {
 		gridC.anchor = place;
 		gridC.fill = stretch;
 		thePanel.add(comp, gridC);	
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource() == submit){
+			//post data to database
+			//CName_Label.getText() redo this for all account info data to access the new updated values
+		}
+		
 	}
 }
