@@ -181,6 +181,7 @@ public class Cart extends JFrame implements ActionListener{
 			}
 			
 			Checkout checkout_page = new Checkout(CID, total, list);
+			this.dispose();
 		}
 		
 	}
