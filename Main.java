@@ -47,7 +47,6 @@ public class Main extends JFrame implements ActionListener{
     
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getSource()==login){
 			LoginPage test = new LoginPage();
 		}

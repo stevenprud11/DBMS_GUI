@@ -34,6 +34,7 @@ public class Checkout extends JFrame implements ActionListener {
 	static JTextField name_t, shipping_t, ccnumber_t, ccode_t, exp_t, billing_t;
 	static JPanel mpp;
 	static JButton checkout;
+	static ArrayList<Integer> Cart_List = new ArrayList<Integer>();
 	static int CID;
 	static boolean error = false;
 	
@@ -127,7 +128,9 @@ public class Checkout extends JFrame implements ActionListener {
 			failedAction("cc");
 		}
 		else if (e.getSource()==checkout){
-			finishCheckout();	
+			finishCheckout();
+			failedAction("succeed");
+			this.dispose();
 		}
 	}
 	
@@ -146,7 +149,7 @@ public class Checkout extends JFrame implements ActionListener {
 		}
 		else if(fail == "succeed") {
 			frame.setTitle("Success");
-			label = new JLabel("The purchase was processed correctly."); 
+			label = new JLabel("The purchase was processed successfully."); 
 		}
 		else {
 			label = new JLabel("An error occured.");  
@@ -194,20 +197,21 @@ public class Checkout extends JFrame implements ActionListener {
 				//checkout the book
 				//remove from list
 				//update book table
-	        	
-	        	//Update Date_Updated in Cart_Detail
-	        	//Update Date_Purchased in Shopping_Cart
+
 	        	Statement st = con.createStatement();
 	        	Date date = new Date();
 	        	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
 	        	String sql = "SELECT Cart_ID FROM Shopping_Cart WHERE CID='"+CID+"';";
 	        	ResultSet response = st.executeQuery(sql);
-	        	response.next();
-	        	int cart_id = response.getInt("Cart_ID");
-	        	sql = "UPDATE Cart_Detail SET Date_Updated ='"+formatter.format(date)+"' WHERE Cart_ID = '"+cart_id+"';";
-	        	st.executeUpdate(sql);
-	        	sql = "UPDATE Shopping_Cart SET Date_Purchased ='"+formatter.format(date)+"' WHERE Cart_ID = '"+cart_id+"' AND CID='"+CID+"';";
-	        	st.executeUpdate(sql);
+	        	while(response.next()) {
+	        		Cart_List.add(response.getInt("Cart_ID"));
+	        	}
+	        	for (int i=0; i< Cart_List.size(); i++) {
+		        	sql = "UPDATE Cart_Detail SET Date_Updated ='"+formatter.format(date)+"' WHERE Cart_ID = '"+Cart_List.get(i)+"';";
+		        	st.executeUpdate(sql);
+		        	sql = "UPDATE Shopping_Cart SET Date_Purchased ='"+formatter.format(date)+"' WHERE Cart_ID = '"+Cart_List.get(i)+"' AND CID='"+CID+"';";
+		        	st.executeUpdate(sql);
+	        	}
 	        }
 	        catch (SQLException x){
 	        	System.out.println(x);

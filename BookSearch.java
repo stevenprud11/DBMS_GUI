@@ -76,18 +76,8 @@ public class BookSearch extends JFrame implements ActionListener{
 		
 		this.add(mpp);
 		this.setVisible(true);
-		
-		
-		
 	}
-	
-	/*
-	 * this function executes the book search query
-	 * it works by passing in the title of the book in the constructor
-	 * and searches the Book table for the book title
-	 * if no title is found nothing is printed
-	 * else, it puts the data for the book in the JPanel
-	 */
+
 	public void executeBookSearch(){
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
@@ -97,7 +87,6 @@ public class BookSearch extends JFrame implements ActionListener{
 	    String dbPasswd = "password";
 	    try{
 	    	Class.forName(driver);
-	    	String reasonForFail = "";
 	        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
 	        try{
 	        	Statement st = con.createStatement();
@@ -179,12 +168,7 @@ public class BookSearch extends JFrame implements ActionListener{
 		gridC.fill = stretch;
 		thePanel.add(comp, gridC);	
 	}
-	/*
-	 * Listens to see if button is pressed
-	 * if so then adds book to cart and decreases quantity 
-	 * of that book available in book table
-	 */
-	
+
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -193,7 +177,6 @@ public class BookSearch extends JFrame implements ActionListener{
         String db = "zatheiss";
         String dbUser = "zatheiss";
 	    String dbPasswd = "password";
-		// TODO Auto-generated method stub
 		for(int i = 0; i < add_button.size(); i++){
 			if(e.getSource()==add_button.get(i)){
 				System.out.println("correlates to " + ISBN_Location.get(i));

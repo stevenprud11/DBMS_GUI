@@ -70,21 +70,9 @@ public class BookList extends JFrame implements ActionListener {
 		
 		this.add(mpp);
 		this.setVisible(true);
-		
-		
-		
 	}
 	
-	/*
-	 * execute query to get all data from Book table
-	 * it loops through all the books, grabs all the data
-	 * and displays it row by row on the JPanel
-	 * 
-	 * it also adds the ISBN and Button to different arraylist
-	 * these correlate indexes to know which button corresponds
-	 * to which book, in the button listener
-	 * button[i] corresponds to ISBN_Location[i] (they are in arraylist)
-	 */
+
 	public void executeBookList(){
         Connection con = null;
         String driver = "com.mysql.jdbc.Driver";
@@ -94,7 +82,6 @@ public class BookList extends JFrame implements ActionListener {
 	    String dbPasswd = "password";
 	    try{
 	    	Class.forName(driver);
-	    	String reasonForFail = "";
 	        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
 	        try{
 	        	Statement st = con.createStatement();
@@ -185,7 +172,6 @@ public class BookList extends JFrame implements ActionListener {
         String db = "zatheiss";
         String dbUser = "zatheiss";
 	    String dbPasswd = "password";
-		// TODO Auto-generated method stub
 		for(int i = 0; i < add_button.size(); i++){
 			if(e.getSource()==add_button.get(i)){
 				System.out.println("correlates to " + ISBN_Location.get(i));

@@ -43,12 +43,12 @@ public class Cart extends JFrame implements ActionListener{
 	static ArrayList<JCheckBox> checkbox = new ArrayList<>();
 	static ArrayList<Book> ISBN_Location = new ArrayList<Book>();
 	static ArrayList<Integer> ISBN_LookUp = new ArrayList<Integer>();
+	static ArrayList<Integer> Book_List = new ArrayList<Integer>();
 	static int cart_ID;
 	
 	public Cart(int CID){
 		sshConnection();
 		this.CID = CID;
-		//set size of obj
 		this.setSize(500,500);
 		this.setLocationRelativeTo(null);
 		this.setTitle("Cart");
@@ -78,21 +78,25 @@ public class Cart extends JFrame implements ActionListener{
 	    String dbPasswd = "password";
 	    try{
 	    	Class.forName(driver);
-	    	String reasonForFail = "";
 	        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
 	        try{
 	        	String sql;
 	        	Statement st = con.createStatement();
-	        	sql = "SELECT Cart_ID FROM Shopping_Cart WHERE CID='"+CID+"';";
+	        	sql = "SELECT Cart_ID FROM Shopping_Cart WHERE CID='"+CID+"' AND Date_Purchased is NULL;";
 	        	ResultSet response = st.executeQuery(sql);
-	        	response.next();
-	        	int cart_ID = response.getInt("Cart_ID");
-	        	sql = "SELECT ISBN FROM Cart_Detail WHERE Cart_ID='"+cart_ID+"';";
-	        	ResultSet cartResponse = st.executeQuery(sql);
-	        	
-				while(cartResponse.next()){
-					ISBN_LookUp.add(cartResponse.getInt("ISBN"));
-				}
+	        	while(response.next()) {
+	        		Book_List.add(response.getInt("Cart_ID"));
+	        	}
+	        	for (int i=0; i < Book_List.size(); i++) {
+	        		sql = "SELECT ISBN FROM Cart_Detail WHERE Cart_ID='"+Book_List.get(i)+"';";
+	        		ResultSet cartResponse = st.executeQuery(sql);
+	        		System.out.println(cartResponse.wasNull());
+	        		while(cartResponse.next()){
+						ISBN_LookUp.add(cartResponse.getInt("ISBN"));
+						System.out.println(cartResponse.getInt("ISBN"));
+					}
+	        	}
+	       
 				int y = 0;
 				for(int i = 0; i < ISBN_LookUp.size(); i++){
 					sql = "select ISBN, Price, Title from Book WHERE ISBN='"+ISBN_LookUp.get(i)+"';";
@@ -164,10 +168,7 @@ public class Cart extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getSource()==checkout){
-			//need to see which carts are checked, 
-			//ones that are checked are the ones we are going to checkout
 			ArrayList<Book> list = new ArrayList<>();
 			double total = 0.0;
 			for(int i = 0; i < checkbox.size(); i++){
@@ -178,8 +179,6 @@ public class Cart extends JFrame implements ActionListener{
 				}
 					
 			}
-
-			
 			
 			Checkout checkout_page = new Checkout(CID, total, list);
 		}
