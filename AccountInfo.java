@@ -1,4 +1,5 @@
 package mypackage;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -98,8 +99,22 @@ public class AccountInfo extends JFrame implements ActionListener {
 		this.add(mpp);
 		this.setVisible(true);
 		
-		
-		
+	}
+	
+	
+	public static void failedAction(String fail) {
+		JPanel panel = new JPanel();
+		JLabel label;
+		panel.setMinimumSize(new Dimension(200, 200));
+		JFrame frame = new JFrame();
+		frame.setTitle("Error");
+		if (fail == "information") {
+			label = new JLabel("Information is missing.");  
+		}
+		else {
+			label = new JLabel("An error occured.");  
+		}
+		JOptionPane.showMessageDialog(frame, label);
 	}
 
 	public static void executeAccountInfo(){
@@ -111,7 +126,6 @@ public class AccountInfo extends JFrame implements ActionListener {
 	    String dbPasswd = "password";
 	    try{
 	    	Class.forName(driver);
-	    	String reasonForFail = "";
 	        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
 	        try{
 	        	Statement st = con.createStatement();
@@ -138,14 +152,6 @@ public class AccountInfo extends JFrame implements ActionListener {
 	        		ZipCode_Label = new JTextField(ZipCode);
 	        		
 	        		CName_Label.setPreferredSize( new Dimension( 100, 24 ) );
-//	        		Email_Label.setPreferredSize( new Dimension( 100, 24 ) );
-//	        		Password_Label.setPreferredSize( new Dimension( 100, 24 ) );
-//	        		Phone_Label.setPreferredSize( new Dimension( 100, 24 ) );
-//	        		Address_Label.setPreferredSize( new Dimension( 100, 24 ) );
-//	        		City_Label.setPreferredSize( new Dimension( 100, 24 ) );
-//	        		State_Label.setPreferredSize( new Dimension( 100, 24 ) );
-//	        		ZipCode_Label.setPreferredSize( new Dimension( 100, 24 ) );
-	        		
 	        		addComp(mpp, CName_Label, 0,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	        		addComp(mpp, Email_Label, 4,6, 2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	        		addComp(mpp, Password_Label, 8,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
@@ -154,8 +160,6 @@ public class AccountInfo extends JFrame implements ActionListener {
 	        		addComp(mpp, City_Label, 20,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	        		addComp(mpp, State_Label, 24,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 	        		addComp(mpp, ZipCode_Label, 28,6,2,3, GridBagConstraints.CENTER, GridBagConstraints.NONE);
-	        		
-	        		System.out.println(CID + " " + CName);
 	        	}
 	        }
 	        	catch(Exception e){
@@ -182,10 +186,8 @@ public class AccountInfo extends JFrame implements ActionListener {
             rport = 3306;
             session.setPassword(password);
             session.setConfig("StrictHostKeyChecking", "no");
-            System.out.println("Establishing Connection...");
 	        session.connect();
-	        int assinged_port=session.setPortForwardingL(lport, rhost, rport);
-            System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
+	        session.setPortForwardingL(lport, rhost, rport);
             }
         catch(Exception e){System.err.print(e);}
     }
@@ -207,8 +209,41 @@ public class AccountInfo extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == submit){
-			//post data to database
-			//CName_Label.getText() redo this for all account info data to access the new updated values
+			if (CName_Label.getText().contentEquals("") || Email_Label.getText().contentEquals("") || Password_Label.getText().contentEquals("")
+					|| Phone_Label.getText().contentEquals("") || Address_Label.getText().contentEquals("") || City_Label.getText().contentEquals("")
+					|| State_Label.getText().contentEquals("") || ZipCode_Label.getText().contentEquals("")) {
+				failedAction("information");
+			}	
+			else {
+				sshConnection();
+				Connection con = null;
+		        String driver = "com.mysql.jdbc.Driver";
+		        String url = "jdbc:mysql://" + rhost +":" + lport + "/";
+		        String db = "zatheiss";
+		        String dbUser = "zatheiss";
+			    String dbPasswd = "password";
+			    try{
+			    	Class.forName(driver);
+			        con = DriverManager.getConnection(url+db, dbUser, dbPasswd);
+			        try{
+			        	Statement st = con.createStatement();
+			        	String sql = "UPDATE Customer SET CName='"+CName_Label.getText()+"', Email='"+Email_Label.getText()+"', userPassword='"+Password_Label.getText()
+			        			+"', Phone='"+Phone_Label.getText()+"', Address='"+Address_Label.getText()+"', City='"+City_Label.getText()
+			        			+"', State='"+State_Label.getText()+"', ZipCode='"+ZipCode_Label.getText()+"' WHERE CID='"+CID+"';";
+			        	st.executeUpdate(sql);
+	
+			        }
+			        	catch(Exception er){
+			        		er.printStackTrace();
+			        	}
+			    }
+			    catch (Exception err){
+			    	err.printStackTrace();
+			    }
+		    	session.disconnect();
+		    	this.dispose();
+			}
+			
 		}
 		
 	}
