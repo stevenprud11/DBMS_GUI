@@ -1,13 +1,11 @@
 Need to do:
   Cart Window (Remove from cart, Merge Cart)
-    Each item gets its own cart, select books to checkout.
-    All books selected will get the Cart_ID changed to the Highest number.
-    Add completed date to the cart.
+    Remove from Cart, All books selected will get the Cart_ID changed to the Highest number.
+    
   Account Window 
     Be able to Edit Information then save to DB.
-  Checkout Button (Marks cart as checked out (Cart Table))
-    Has a window for checkout (Billing and Shipping Address (Don't need to save))
-    Merging carts will be by allowing users to pick the books they wish to Checkout (Similar to BookSearch, but add to checkout)
+    Use the create user and then if empty skip
+    
     
 ASSUMPTION:
 Each Book is it's own cart, the merge occurs during checkout when you select the books to purchase.
